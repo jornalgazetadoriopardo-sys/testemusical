@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de Participação</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <h1>Painel de Participação dos Ouvintes</h1>
+    <nav class="abas">
+      <button class="aba ativa" data-view="jogo-notas">Jogo das Notas</button>
+      <button class="aba" data-view="admin">Administração</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===================== JOGO DAS NOTAS ===================== -->
+    <section id="jogo-notas" class="view ativa">
+      <div class="bloco">
+        <h2>1. Escolha a música em jogo</h2>
+        <div id="lista-musicas-jogo" class="grade-musicas"></div>
+        <p id="sem-musicas" class="aviso" hidden>
+          Nenhuma música cadastrada. Cadastre na aba <strong>Administração</strong>.
+        </p>
+      </div>
+
+      <div id="area-notas" class="bloco" hidden>
+        <div class="cabecalho-musica">
+          <div>
+            <h2 id="titulo-em-jogo"></h2>
+            <p id="artista-em-jogo" class="artista"></p>
+          </div>
+          <button id="btn-zerar" class="btn secundario" title="Limpa as marcações de notas já tocadas">Zerar rodada</button>
+        </div>
+
+        <h3>2. Quantas notas tocar</h3>
+        <div id="botoes-notas" class="grade-notas"></div>
+
+        <div class="controles">
+          <button id="btn-completa" class="btn completa">▶ Música inteira</button>
+          <button id="btn-parar" class="btn parar">■ Parar</button>
+        </div>
+
+        <p class="dica">Atalhos: teclas <kbd>1</kbd>–<kbd>7</kbd> tocam as notas, <kbd>M</kbd> toca a música inteira, <kbd>Esc</kbd> ou <kbd>Espaço</kbd> param o áudio.</p>
+      </div>
+    </section>
+
+    <!-- ===================== ADMINISTRAÇÃO ===================== -->
+    <section id="admin" class="view">
+      <div class="bloco">
+        <h2 id="titulo-form">Cadastrar música</h2>
+        <form id="form-musica" autocomplete="off">
+          <div class="linha">
+            <label>Título da música *
+              <input type="text" id="campo-titulo" required>
+            </label>
+            <label>Artista
+              <input type="text" id="campo-artista">
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>Música inteira</legend>
+            <div id="slot-completa" class="slot"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Áudios das notas (1 a 7)</legend>
+            <p class="dica">Cada botão do jogo toca o arquivo enviado aqui. Ex.: o botão 3 toca o áudio com as 3 primeiras notas.</p>
+            <div id="slots-notas" class="slots-notas"></div>
+          </fieldset>
+
+          <div class="controles">
+            <button type="submit" class="btn primario">Salvar música</button>
+            <button type="button" id="btn-cancelar" class="btn secundario" hidden>Cancelar edição</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="bloco">
+        <h2>Músicas cadastradas</h2>
+        <table class="tabela">
+          <thead>
+            <tr><th>Título</th><th>Artista</th><th>Notas</th><th>Inteira</th><th></th></tr>
+          </thead>
+          <tbody id="tabela-musicas"></tbody>
+        </table>
+        <p id="tabela-vazia" class="aviso" hidden>Nenhuma música cadastrada ainda.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/db.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/jogo-notas.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

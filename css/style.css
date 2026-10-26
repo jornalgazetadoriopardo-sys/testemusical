@@ -1,0 +1,207 @@
+:root {
+  --fundo: #12141a;
+  --painel: #1c1f28;
+  --borda: #2c3140;
+  --texto: #e8eaf0;
+  --texto-suave: #9aa1b2;
+  --primaria: #3b82f6;
+  --destaque: #f59e0b;
+  --sucesso: #22c55e;
+  --perigo: #ef4444;
+  --raio: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.4;
+}
+
+h1, h2, h3 { margin: 0 0 12px; }
+h1 { font-size: 1.3rem; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; color: var(--texto-suave); margin-top: 20px; }
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--painel);
+  border-bottom: 1px solid var(--borda);
+}
+.topo h1 { margin: 0; }
+
+.abas { display: flex; gap: 8px; }
+.aba {
+  background: transparent;
+  color: var(--texto-suave);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.aba.ativa { background: var(--primaria); border-color: var(--primaria); color: #fff; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+.view { display: none; }
+.view.ativa { display: block; }
+
+.bloco {
+  background: var(--painel);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.aviso { color: var(--texto-suave); margin: 0; }
+.dica { color: var(--texto-suave); font-size: 0.85rem; }
+kbd {
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.8rem;
+}
+
+/* ---------- Botões ---------- */
+.btn {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: #262b38;
+  color: var(--texto);
+  padding: 10px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.05s;
+}
+.btn:hover:not(:disabled) { border-color: var(--primaria); }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn.primario { background: var(--primaria); border-color: var(--primaria); color: #fff; }
+.btn.secundario { background: transparent; }
+.btn.perigo { background: transparent; color: var(--perigo); border-color: #5a2a2a; }
+.btn.pequeno { padding: 5px 10px; font-size: 0.85rem; }
+
+/* ---------- Jogo das notas ---------- */
+.grade-musicas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.btn.musica {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 14px;
+}
+.btn.musica .num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--fundo);
+  font-weight: 700;
+}
+.btn.musica.usada { border-style: dashed; }
+.btn.musica.selecionada { background: var(--primaria); border-color: var(--primaria); color: #fff; }
+
+.cabecalho-musica {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.cabecalho-musica h2 { font-size: 1.5rem; margin-bottom: 2px; }
+.artista { color: var(--texto-suave); margin: 0; }
+
+.grade-notas {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+.btn.nota {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 4px;
+}
+.btn.nota .qtd { font-size: 2rem; font-weight: 800; line-height: 1; }
+.btn.nota .rotulo { font-size: 0.8rem; color: var(--texto-suave); }
+.btn.nota.tocada { border-color: var(--destaque); }
+.btn.nota.tocada .qtd { color: var(--destaque); }
+
+.btn.tocando,
+.btn.nota.tocando {
+  background: var(--sucesso);
+  border-color: var(--sucesso);
+  color: #fff;
+}
+.btn.nota.tocando .qtd,
+.btn.nota.tocando .rotulo { color: #fff; }
+
+.controles { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.btn.completa { font-size: 1.1rem; padding: 14px 28px; }
+.btn.parar { font-size: 1.1rem; padding: 14px 28px; color: var(--perigo); border-color: #5a2a2a; background: transparent; }
+
+@media (max-width: 640px) {
+  .grade-notas { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---------- Administração ---------- */
+.linha { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
+.linha label { flex: 1 1 240px; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; color: var(--texto-suave); }
+input[type="text"] {
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  color: var(--texto);
+  padding: 10px 12px;
+  font-size: 1rem;
+}
+input[type="text"]:focus { outline: 2px solid var(--primaria); border-color: transparent; }
+
+fieldset {
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 12px 16px;
+  margin: 0 0 16px;
+}
+legend { padding: 0 6px; color: var(--texto-suave); }
+fieldset .dica { margin-top: 0; }
+
+.slots-notas { display: flex; flex-direction: column; gap: 8px; }
+.slot-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.slot-rotulo { width: 70px; font-weight: 600; }
+.slot-arquivo {
+  flex: 1 1 160px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+.slot-arquivo.vazio { color: var(--texto-suave); font-style: italic; }
+
+.tabela { width: 100%; border-collapse: collapse; }
+.tabela th, .tabela td { padding: 10px 8px; border-bottom: 1px solid var(--borda); text-align: left; }
+.tabela th { color: var(--texto-suave); font-weight: 500; font-size: 0.85rem; }
+.tabela .acoes { text-align: right; white-space: nowrap; }
+.tabela .acoes .btn + .btn { margin-left: 6px; }
