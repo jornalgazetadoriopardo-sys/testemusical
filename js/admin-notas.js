@@ -57,7 +57,7 @@ const AdminNotas = (() => {
   }
 
   async function excluir(id, titulo) {
-    if (!confirm(`Excluir a música "${titulo}"? Os áudios cadastrados serão apagados.`)) return;
+    if (!await Confirmar.perguntar(`Excluir a música "${titulo}"? Os áudios cadastrados serão apagados.`, 'Excluir')) return;
     Player.parar();
     await DB.musicas.excluir(id);
     if (editandoId === id) limparFormulario();

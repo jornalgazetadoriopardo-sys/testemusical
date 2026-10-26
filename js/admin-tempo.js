@@ -54,7 +54,7 @@ const AdminTempo = (() => {
   }
 
   async function excluir(id, nome) {
-    if (!confirm(`Excluir a rodada "${nome}"? Os áudios cadastrados serão apagados.`)) return;
+    if (!await Confirmar.perguntar(`Excluir a rodada "${nome}"? Os áudios cadastrados serão apagados.`, 'Excluir')) return;
     Player.parar();
     await DB.rodadas.excluir(id);
     if (editandoId === id) limparFormulario();

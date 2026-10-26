@@ -99,17 +99,17 @@ const JogoTempo = (() => {
     render();
   }
 
-  function reiniciar() {
-    if (emAndamento() && !confirm('Descartar a participação em andamento?')) return;
+  async function reiniciar() {
+    if (emAndamento() && !await Confirmar.perguntar('Descartar a participação em andamento?', 'Descartar')) return;
     Player.parar();
     pararRelogio();
     estado = novoEstado();
     render();
   }
 
-  function selecionarRodada(id) {
+  async function selecionarRodada(id) {
     if (rodada && rodada.id === id) return;
-    if (emAndamento() && !confirm('Trocar de rodada descarta a participação em andamento. Continuar?')) return;
+    if (emAndamento() && !await Confirmar.perguntar('Trocar de rodada descarta a participação em andamento. Continuar?', 'Trocar')) return;
     Player.parar();
     pararRelogio();
     rodada = rodadas.find((r) => r.id === id) || null;
@@ -228,7 +228,7 @@ const JogoTempo = (() => {
   }
 
   function teclado(e) {
-    if (!el('jogo-tempo').classList.contains('ativa')) return;
+    if (!el('jogo-tempo').classList.contains('ativa') || Confirmar.aberta()) return;
     if (e.target.closest('input, textarea, select')) return;
     if (e.key === 'Enter' || e.key === 'ArrowRight') {
       e.preventDefault();

@@ -94,7 +94,7 @@ const JogoNotas = (() => {
   }
 
   function teclado(e) {
-    if (!el('jogo-notas').classList.contains('ativa')) return;
+    if (!el('jogo-notas').classList.contains('ativa') || Confirmar.aberta()) return;
     if (e.target.closest('input, textarea, select')) return;
     if (e.key >= '1' && e.key <= String(TOTAL_NOTAS)) {
       tocarNota(Number(e.key));

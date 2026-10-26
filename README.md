@@ -4,7 +4,7 @@ Painel para o operador conduzir os jogos com ouvintes durante o programa de rád
 
 ## Como usar
 
-Abra o arquivo `index.html` no navegador (Chrome, Edge ou Firefox). Não precisa instalar nada.
+Abra pelo link https://claude.ai/artifact/1z1xFtKeVj4qxXGvqhceXr ou abra o arquivo `index.html` no navegador (Chrome, Edge ou Firefox). Não precisa instalar nada.
 
 ### Administração
 
