@@ -205,3 +205,84 @@ fieldset .dica { margin-top: 0; }
 .tabela th { color: var(--texto-suave); font-weight: 500; font-size: 0.85rem; }
 .tabela .acoes { text-align: right; white-space: nowrap; }
 .tabela .acoes .btn + .btn { margin-left: 6px; }
+
+/* ---------- Jogo do Tempo ---------- */
+.btn.rodada.selecionada { background: var(--primaria); border-color: var(--primaria); color: #fff; }
+
+.cronometro {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--sucesso);
+  min-height: 1.2em;
+}
+
+.grade-tempo {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px 10px;
+  margin-top: 16px;
+}
+.celula-tempo { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.btn.musica-tempo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 6px;
+  min-height: 92px;
+}
+.btn.musica-tempo:disabled { opacity: 1; cursor: default; }
+.btn.musica-tempo.pendente:disabled { opacity: 0.6; }
+.btn.musica-tempo .qtd { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+.btn.musica-tempo .rotulo {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.btn.musica-tempo.respondeu { border-color: var(--primaria); }
+.btn.musica-tempo.pulou { border-color: var(--destaque); border-style: dashed; }
+.btn.musica-tempo.tocando,
+.btn.musica-tempo.tocando .rotulo { background: var(--sucesso); border-color: var(--sucesso); color: #fff; border-style: solid; }
+
+.celula-tempo .info {
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-height: 1.4em;
+}
+.celula-tempo .info.pulou { color: var(--destaque); font-weight: 600; }
+
+.btn.pular { font-size: 1.1rem; padding: 14px 28px; color: var(--destaque); border-color: #5a4515; background: transparent; }
+
+.resultado {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: var(--raio);
+  background: var(--fundo);
+  border: 1px solid var(--primaria);
+  text-align: center;
+}
+.resultado p { margin: 0; }
+.resultado .rotulo-total { color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem; }
+.resultado .total { font-size: 3rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 640px) {
+  .grade-tempo { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- Sub-abas da administração ---------- */
+.subabas { margin-bottom: 16px; }
+.subview { display: none; }
+.subview.ativa { display: block; }
+.slot-titulo {
+  flex: 1 1 200px;
+  padding: 6px 10px !important;
+  font-size: 0.9rem !important;
+}

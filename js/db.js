@@ -1,9 +1,10 @@
-// Armazenamento local (IndexedDB) das músicas e seus áudios.
-// Cada música: { id, titulo, artista, completa: Blob|null, notas: [Blob|null x7], criadoEm }
+// Armazenamento local (IndexedDB) dos cadastros e seus áudios.
+// musicas (Jogo das Notas): { id, titulo, artista, completa: Blob|null, notas: [Blob|null x7], criadoEm }
+// rodadas (Jogo do Tempo): { id, nome, musicas: [{ titulo, audio: Blob|null } x10], criadoEm }
 const DB = (() => {
   const NOME = 'painel-participacao';
-  const VERSAO = 1;
-  const STORE = 'musicas';
+  const VERSAO = 2;
+  const STORES = ['musicas', 'rodadas'];
   let conexao = null;
 
   function abrir() {
@@ -11,7 +12,11 @@ const DB = (() => {
     conexao = new Promise((resolve, reject) => {
       const req = indexedDB.open(NOME, VERSAO);
       req.onupgradeneeded = () => {
-        req.result.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
+        STORES.forEach((store) => {
+          if (!req.result.objectStoreNames.contains(store)) {
+            req.result.createObjectStore(store, { keyPath: 'id', autoIncrement: true });
+          }
+        });
       };
       req.onsuccess = () => resolve(req.result);
       req.onerror = () => reject(req.error);
@@ -19,23 +24,30 @@ const DB = (() => {
     return conexao;
   }
 
-  async function executar(modo, acao) {
+  async function executar(store, modo, acao) {
     const db = await abrir();
     return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, modo);
-      const req = acao(tx.objectStore(STORE));
+      const tx = db.transaction(store, modo);
+      const req = acao(tx.objectStore(store));
       tx.oncomplete = () => resolve(req.result);
       tx.onerror = () => reject(tx.error);
     });
   }
 
+  function colecao(store) {
+    return {
+      async listar() {
+        const itens = await executar(store, 'readonly', (s) => s.getAll());
+        return itens.sort((a, b) => a.criadoEm - b.criadoEm);
+      },
+      obter: (id) => executar(store, 'readonly', (s) => s.get(id)),
+      salvar: (item) => executar(store, 'readwrite', (s) => s.put(item)),
+      excluir: (id) => executar(store, 'readwrite', (s) => s.delete(id)),
+    };
+  }
+
   return {
-    async listar() {
-      const musicas = await executar('readonly', (s) => s.getAll());
-      return musicas.sort((a, b) => a.criadoEm - b.criadoEm);
-    },
-    obter: (id) => executar('readonly', (s) => s.get(id)),
-    salvar: (musica) => executar('readwrite', (s) => s.put(musica)),
-    excluir: (id) => executar('readwrite', (s) => s.delete(id)),
+    musicas: colecao('musicas'),
+    rodadas: colecao('rodadas'),
   };
 })();

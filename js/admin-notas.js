@@ -1,5 +1,5 @@
-// Administração: cadastro, edição e exclusão das músicas e seus áudios.
-const Admin = (() => {
+// Administração do Jogo das Notas: cadastro, edição e exclusão das músicas e seus áudios.
+const AdminNotas = (() => {
   const el = (id) => document.getElementById(id);
 
   let editandoId = null;
@@ -10,61 +10,26 @@ const Admin = (() => {
     return { completa: null, notas: Array(JogoNotas.TOTAL_NOTAS).fill(null) };
   }
 
-  function nomeArquivo(blob) {
-    return blob && blob.name ? blob.name : 'áudio salvo';
-  }
-
-  // Um "slot" é a linha de um arquivo de áudio: escolher, ouvir e remover.
-  function criarSlot(rotulo, chave, obter, definir) {
-    const slot = document.createElement('div');
-    slot.className = 'slot-linha';
-    slot.innerHTML = `
-      <span class="slot-rotulo"></span>
-      <span class="slot-arquivo"></span>
-      <label class="btn secundario pequeno">Escolher arquivo
-        <input type="file" accept="audio/*" hidden>
-      </label>
-      <button type="button" class="btn secundario pequeno ouvir">▶ Ouvir</button>
-      <button type="button" class="btn perigo pequeno remover">Remover</button>
-    `;
-    slot.querySelector('.slot-rotulo').textContent = rotulo;
-
-    const atualizar = () => {
-      const blob = obter();
-      const arquivo = slot.querySelector('.slot-arquivo');
-      arquivo.textContent = blob ? nomeArquivo(blob) : 'nenhum arquivo';
-      arquivo.classList.toggle('vazio', !blob);
-      slot.querySelector('.ouvir').disabled = !blob;
-      slot.querySelector('.remover').disabled = !blob;
-    };
-
-    slot.querySelector('input').addEventListener('change', (e) => {
-      const arquivo = e.target.files[0];
-      if (arquivo) definir(arquivo);
-      e.target.value = '';
-      atualizar();
-    });
-    slot.querySelector('.ouvir').addEventListener('click', () => Player.alternar(obter(), `admin-${chave}`));
-    slot.querySelector('.remover').addEventListener('click', () => {
-      Player.parar();
-      definir(null);
-      atualizar();
-    });
-
-    atualizar();
-    return slot;
-  }
-
   function renderSlots() {
     const completa = el('slot-completa');
     completa.innerHTML = '';
-    completa.appendChild(criarSlot('Inteira', 'completa', () => rascunho.completa, (b) => { rascunho.completa = b; }));
+    completa.appendChild(Slot.criar({
+      rotulo: 'Inteira',
+      chave: 'completa',
+      obter: () => rascunho.completa,
+      definir: (b) => { rascunho.completa = b; },
+    }));
 
     const notas = el('slots-notas');
     notas.innerHTML = '';
     for (let i = 0; i < JogoNotas.TOTAL_NOTAS; i++) {
       const rotulo = `${i + 1} ${i === 0 ? 'nota' : 'notas'}`;
-      notas.appendChild(criarSlot(rotulo, `nota-${i + 1}`, () => rascunho.notas[i], (b) => { rascunho.notas[i] = b; }));
+      notas.appendChild(Slot.criar({
+        rotulo,
+        chave: `nota-${i + 1}`,
+        obter: () => rascunho.notas[i],
+        definir: (b) => { rascunho.notas[i] = b; },
+      }));
     }
   }
 
@@ -78,7 +43,7 @@ const Admin = (() => {
   }
 
   async function editar(id) {
-    const musica = await DB.obter(id);
+    const musica = await DB.musicas.obter(id);
     if (!musica) return;
     Player.parar();
     editandoId = id;
@@ -94,7 +59,7 @@ const Admin = (() => {
   async function excluir(id, titulo) {
     if (!confirm(`Excluir a música "${titulo}"? Os áudios cadastrados serão apagados.`)) return;
     Player.parar();
-    await DB.excluir(id);
+    await DB.musicas.excluir(id);
     if (editandoId === id) limparFormulario();
     await renderTabela();
     aoAlterar();
@@ -105,7 +70,7 @@ const Admin = (() => {
     const titulo = el('campo-titulo').value.trim();
     if (!titulo) return;
 
-    const existente = editandoId ? await DB.obter(editandoId) : null;
+    const existente = editandoId ? await DB.musicas.obter(editandoId) : null;
     const musica = {
       titulo,
       artista: el('campo-artista').value.trim(),
@@ -116,14 +81,14 @@ const Admin = (() => {
     if (editandoId) musica.id = editandoId;
 
     Player.parar();
-    await DB.salvar(musica);
+    await DB.musicas.salvar(musica);
     limparFormulario();
     await renderTabela();
     aoAlterar();
   }
 
   async function renderTabela() {
-    const musicas = await DB.listar();
+    const musicas = await DB.musicas.listar();
     const corpo = el('tabela-musicas');
     corpo.innerHTML = '';
     el('tabela-vazia').hidden = musicas.length > 0;

@@ -9,7 +9,7 @@ const JogoNotas = (() => {
   const tocadas = {};
 
   async function carregar() {
-    musicas = await DB.listar();
+    musicas = await DB.musicas.listar();
     if (selecionada) {
       selecionada = musicas.find((m) => m.id === selecionada.id) || null;
     }

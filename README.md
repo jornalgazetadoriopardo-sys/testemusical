@@ -8,7 +8,9 @@ Abra o arquivo `index.html` no navegador (Chrome, Edge ou Firefox). Não precisa
 
 ### Administração
 
-Na aba **Administração**, cadastre cada música:
+A aba **Administração** tem uma sub-aba para cada jogo.
+
+Em **Jogo das Notas**, cadastre cada música:
 
 - **Título** e **artista**
 - **Música inteira**: o arquivo completo
@@ -16,6 +18,8 @@ Na aba **Administração**, cadastre cada música:
 
 Os slots podem ficar vazios; o botão correspondente aparece desabilitado no jogo.
 Músicas cadastradas podem ser editadas ou excluídas na tabela.
+
+Em **Jogo do Tempo**, cadastre rodadas: um nome (ex.: "Programa de segunda") e as 10 músicas na ordem em que serão tocadas, cada uma com título e áudio.
 
 ### Jogo das Notas
 
@@ -26,6 +30,20 @@ Músicas cadastradas podem ser editadas ou excluídas na tabela.
 Os botões de notas já tocados ficam marcados em laranja. As músicas já usadas aparecem com borda tracejada. **Zerar rodada** limpa as marcações.
 
 Atalhos de teclado: `1`–`7` tocam as notas, `M` toca a música inteira, `Esc` ou `Espaço` param o áudio.
+
+### Jogo do Tempo
+
+1. Escolha a rodada.
+2. Clique no botão **1**: a primeira música começa a tocar e o cronômetro dispara.
+3. **Próxima** registra o tempo de resposta abaixo do botão e já toca a música seguinte.
+4. **Pular** registra "pulou" e já toca a música seguinte.
+5. Depois da música 10, **Próxima** volta automaticamente para a primeira música pulada, e assim por diante até todas serem respondidas.
+6. Ao final aparece o **tempo total** (soma dos tempos registrados).
+
+Se uma música pulada for respondida depois, o tempo dela soma as duas vezes em que tocou.
+**Finalizar** encerra antes do fim (a música em execução conta como pulada); **Nova participação** zera tudo para o próximo ouvinte.
+
+Atalhos de teclado: `Enter` ou `→` começa / próxima, `P` pula.
 
 ## Onde ficam os dados
 
