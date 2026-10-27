@@ -21,6 +21,10 @@ Músicas cadastradas podem ser editadas ou excluídas na tabela.
 
 Em **Jogo do Tempo**, cadastre rodadas: um nome (ex.: "Programa de segunda") e as 10 músicas na ordem em que serão tocadas, cada uma com título e áudio.
 
+- Arraste vários arquivos de áudio de uma vez para a área tracejada (ou clique nela para escolher). Eles entram nas posições vazias, em ordem de nome.
+- O título é preenchido pelo nome do arquivo, sem a extensão e sem o número da faixa (`03 - Asa_Branca.mp3` vira `Asa Branca`). Dá para editar.
+- Mude a ordem arrastando a linha pela alça ⠿ ou com as setas ↑ ↓. **Limpar as 10 posições** recomeça a lista.
+
 ### Jogo das Notas
 
 1. Clique na música em jogo.
@@ -42,6 +46,10 @@ Atalhos de teclado: `1`–`7` tocam as notas, `M` toca a música inteira, `Esc` 
 
 Se uma música pulada for respondida depois, o tempo dela soma as duas vezes em que tocou.
 **Finalizar** encerra antes do fim (a música em execução conta como pulada); **Nova participação** zera tudo para o próximo ouvinte.
+
+Cada participação fica registrada no **Histórico de participações**, logo abaixo do jogo: data, nome do ouvinte (campo opcional), rodada, músicas respondidas, tempo total e, ao abrir o registro, o tempo de cada música.
+O registro é feito ao terminar a participação. Se uma nova for aberta (ou a rodada trocada) no meio de uma participação, a que estava em andamento é encerrada e registrada.
+O histórico fica salvo no navegador.
 
 Atalhos de teclado: `Enter` ou `→` começa / próxima, `P` pula.
 

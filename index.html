@@ -67,6 +67,10 @@
           <button id="btn-nova-participacao" class="btn secundario">Nova participação</button>
         </div>
 
+        <label class="campo-ouvinte">Nome do ouvinte
+          <input type="text" id="campo-ouvinte" placeholder="Opcional, aparece no histórico" autocomplete="off">
+        </label>
+
         <div id="botoes-tempo" class="grade-tempo"></div>
 
         <div class="controles">
@@ -82,6 +86,19 @@
         </div>
 
         <p class="dica">Atalhos: <kbd>Enter</kbd> ou <kbd>→</kbd> começa / próxima, <kbd>P</kbd> pula.</p>
+      </div>
+
+      <div class="bloco">
+        <div class="cabecalho-musica">
+          <h2>Histórico de participações</h2>
+          <button id="btn-limpar-historico" class="btn perigo pequeno">Apagar histórico</button>
+        </div>
+        <p class="dica">Cada participação é registrada ao terminar ou quando uma nova é aberta. Fica salvo neste navegador.</p>
+        <div class="registro-cabecalho" aria-hidden="true">
+          <span>Data</span><span>Ouvinte</span><span>Rodada</span><span>Respondidas</span><span>Tempo total</span>
+        </div>
+        <div id="lista-historico" class="lista-historico"></div>
+        <p id="historico-vazio" class="aviso" hidden>Nenhuma participação registrada ainda.</p>
       </div>
     </section>
 
@@ -147,6 +164,16 @@
 
             <fieldset>
               <legend>Músicas (na ordem em que serão tocadas)</legend>
+              <div id="area-arquivos" class="area-arquivos" role="button" tabindex="0">
+                <strong>Arraste os arquivos de áudio para cá</strong>
+                <span>ou clique para escolher vários de uma vez. Eles entram nas posições vazias, em ordem de nome, e o título vem do nome do arquivo.</span>
+                <input type="file" id="entrada-arquivos" accept="audio/*" multiple hidden>
+              </div>
+              <div class="barra-arquivos">
+                <p id="aviso-arquivos" class="aviso-arquivos" role="status"></p>
+                <button type="button" id="btn-limpar-musicas" class="btn secundario pequeno">Limpar as 10 posições</button>
+              </div>
+              <p class="dica">Para mudar a ordem, arraste pela alça <span aria-hidden="true">⠿</span> ou use as setas.</p>
               <div id="slots-tempo" class="slots-notas"></div>
             </fieldset>
 
@@ -183,6 +210,7 @@
 
   <script src="js/confirmar.js"></script>
   <script src="js/db.js"></script>
+  <script src="js/historico.js"></script>
   <script src="js/player.js"></script>
   <script src="js/slot.js"></script>
   <script src="js/jogo-notas.js"></script>

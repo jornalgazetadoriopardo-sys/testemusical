@@ -96,26 +96,118 @@ const JogoTempo = (() => {
     pararRelogio();
     estado.atual = -1;
     estado.finalizado = true;
+    registrar();
     render();
   }
 
-  async function reiniciar() {
-    if (emAndamento() && !await Confirmar.perguntar('Descartar a participação em andamento?', 'Descartar')) return;
+  function registrar() {
+    Historico.adicionar({
+      data: new Date().toISOString(),
+      rodada: rodada.nome,
+      ouvinte: el('campo-ouvinte').value.trim(),
+      itens: estado.itens.map((item, i) => ({
+        titulo: rodada.musicas[i].titulo || `Música ${i + 1}`,
+        tempo: Math.round(item.tempo),
+        status: item.status,
+      })),
+      total: Math.round(totalRespondido()),
+      respondidas: estado.itens.filter((item) => item.status === 'respondeu').length,
+    });
+    renderHistorico();
+  }
+
+  // Uma participação em andamento é encerrada e registrada antes de abrir outra.
+  async function encerrarEmAndamento(mensagem) {
+    if (!emAndamento()) return true;
+    if (!await Confirmar.perguntar(mensagem, 'Encerrar e registrar')) return false;
+    finalizar();
+    return true;
+  }
+
+  function novaParticipacao() {
     Player.parar();
     pararRelogio();
     estado = novoEstado();
+    el('campo-ouvinte').value = '';
+  }
+
+  async function reiniciar() {
+    if (!await encerrarEmAndamento('A participação em andamento será encerrada e registrada no histórico.')) return;
+    novaParticipacao();
     render();
+    el('campo-ouvinte').focus();
   }
 
   async function selecionarRodada(id) {
     if (rodada && rodada.id === id) return;
-    if (emAndamento() && !await Confirmar.perguntar('Trocar de rodada descarta a participação em andamento. Continuar?', 'Trocar')) return;
-    Player.parar();
-    pararRelogio();
+    if (!await encerrarEmAndamento('Trocar de rodada encerra a participação em andamento e a registra no histórico.')) return;
     rodada = rodadas.find((r) => r.id === id) || null;
-    estado = novoEstado();
+    novaParticipacao();
     renderRodadas();
     render();
+  }
+
+  // ---------- Histórico ----------
+
+  function formatarData(iso) {
+    return new Date(iso).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  }
+
+  function renderHistorico() {
+    const registros = Historico.listar();
+    const lista = el('lista-historico');
+    lista.innerHTML = '';
+    el('historico-vazio').hidden = registros.length > 0;
+    el('btn-limpar-historico').disabled = registros.length === 0;
+
+    registros.forEach((r) => {
+      const item = document.createElement('details');
+      item.className = 'registro';
+      item.innerHTML = `
+        <summary>
+          <span class="r-data"></span>
+          <span class="r-ouvinte"></span>
+          <span class="r-rodada"></span>
+          <span class="r-respondidas"></span>
+          <span class="r-total"></span>
+        </summary>
+        <ol class="r-itens"></ol>
+        <button type="button" class="btn perigo pequeno">Excluir registro</button>
+      `;
+      item.querySelector('.r-data').textContent = formatarData(r.data);
+      item.querySelector('.r-ouvinte').textContent = r.ouvinte || 'Ouvinte sem nome';
+      item.querySelector('.r-ouvinte').classList.toggle('vazio', !r.ouvinte);
+      item.querySelector('.r-rodada').textContent = r.rodada;
+      item.querySelector('.r-respondidas').textContent = `${r.respondidas}/${r.itens.length}`;
+      item.querySelector('.r-total').textContent = formatarTempo(r.total);
+
+      const itens = item.querySelector('.r-itens');
+      r.itens.forEach((m) => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="r-titulo"></span><span class="r-tempo"></span>';
+        li.querySelector('.r-titulo').textContent = m.titulo;
+        const tempo = li.querySelector('.r-tempo');
+        if (m.status === 'respondeu') tempo.textContent = formatarTempo(m.tempo);
+        else {
+          tempo.textContent = m.status === 'pulou' ? 'pulou' : 'não tocou';
+          tempo.classList.add('pulou');
+        }
+        itens.appendChild(li);
+      });
+
+      item.querySelector('button').addEventListener('click', async () => {
+        if (!await Confirmar.perguntar('Excluir este registro do histórico?', 'Excluir')) return;
+        Historico.excluir(r.id);
+        renderHistorico();
+      });
+      lista.appendChild(item);
+    });
+  }
+
+  async function limparHistorico() {
+    if (!await Confirmar.perguntar('Apagar todo o histórico de participações?', 'Apagar tudo')) return;
+    Historico.limpar();
+    renderHistorico();
   }
 
   // ---------- Relógio ----------
@@ -244,7 +336,9 @@ const JogoTempo = (() => {
     el('btn-pular').addEventListener('click', () => avancar('pulou'));
     el('btn-finalizar').addEventListener('click', finalizar);
     el('btn-nova-participacao').addEventListener('click', reiniciar);
+    el('btn-limpar-historico').addEventListener('click', limparHistorico);
     document.addEventListener('keydown', teclado);
+    renderHistorico();
     return carregar();
   }
 

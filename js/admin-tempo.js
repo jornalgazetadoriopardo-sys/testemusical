@@ -10,25 +10,173 @@ const AdminTempo = (() => {
     return Array.from({ length: JogoTempo.TOTAL_MUSICAS }, () => ({ titulo: '', audio: null }));
   }
 
+  const EXTENSOES_AUDIO = /\.(mp3|wav|ogg|oga|m4a|aac|flac|wma|opus|webm)$/i;
+  let arrastando = null;
+
+  function ehAudio(arquivo) {
+    return arquivo.type.startsWith('audio/') || EXTENSOES_AUDIO.test(arquivo.name);
+  }
+
+  // "03 - Asa_Branca.mp3" -> "Asa Branca"
+  function tituloDoArquivo(nome) {
+    const semExtensao = nome.replace(/\.[^.]+$/, '');
+    const limpo = semExtensao
+      .replace(/[_]+/g, ' ')
+      .replace(/^\s*\d{1,3}\s*[-–.)_]?\s+/, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return limpo || semExtensao;
+  }
+
+  function definirAudio(musica, arquivo) {
+    musica.audio = arquivo;
+    if (arquivo && !musica.titulo.trim()) musica.titulo = tituloDoArquivo(arquivo.name);
+  }
+
+  function mover(de, para) {
+    if (para < 0 || para >= rascunho.length || de === para) return;
+    Player.parar();
+    const [item] = rascunho.splice(de, 1);
+    rascunho.splice(para, 0, item);
+    renderSlots();
+  }
+
+  // Distribui os arquivos, em ordem de nome, nas posições vazias.
+  function distribuir(lista) {
+    const ordenados = [...lista]
+      .filter(ehAudio)
+      .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { numeric: true }));
+    const ignorados = lista.length - ordenados.length;
+    const vazias = rascunho.filter((m) => !m.audio);
+    ordenados.slice(0, vazias.length).forEach((arquivo, i) => definirAudio(vazias[i], arquivo));
+    renderSlots();
+
+    const avisos = [];
+    if (ordenados.length > vazias.length) {
+      avisos.push(`${ordenados.length - vazias.length} arquivo(s) ficaram de fora: não há posições vazias suficientes.`);
+    }
+    if (ignorados) avisos.push(`${ignorados} arquivo(s) ignorados por não serem áudio.`);
+    el('aviso-arquivos').textContent = avisos.join(' ');
+  }
+
+  function limparTodas() {
+    Player.parar();
+    rascunho = novoRascunho();
+    el('aviso-arquivos').textContent = '';
+    renderSlots();
+  }
+
+  function criarLinha(musica, i) {
+    const linha = document.createElement('div');
+    linha.className = 'linha-rodada';
+    linha.dataset.indice = i;
+
+    const alca = document.createElement('span');
+    alca.className = 'alca';
+    alca.title = 'Arraste para mudar a ordem';
+    alca.textContent = '⠿';
+    alca.draggable = true;
+    alca.addEventListener('dragstart', (e) => {
+      arrastando = i;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', String(i));
+      e.dataTransfer.setDragImage(linha, 20, 20);
+      linha.classList.add('arrastando');
+    });
+    alca.addEventListener('dragend', () => {
+      arrastando = null;
+      linha.classList.remove('arrastando');
+    });
+    linha.addEventListener('dragover', (e) => {
+      if (arrastando === null) return;
+      e.preventDefault();
+      linha.classList.add('alvo');
+    });
+    linha.addEventListener('dragleave', () => linha.classList.remove('alvo'));
+    linha.addEventListener('drop', (e) => {
+      if (arrastando === null) return;
+      e.preventDefault();
+      mover(arrastando, i);
+    });
+
+    const titulo = document.createElement('input');
+    titulo.type = 'text';
+    titulo.id = `titulo-tempo-${i}`;
+    titulo.className = 'slot-titulo';
+    titulo.placeholder = 'Título da música';
+    titulo.value = musica.titulo;
+    titulo.addEventListener('input', () => { musica.titulo = titulo.value; });
+
+    const slot = Slot.criar({
+      rotulo: `${i + 1}`,
+      chave: `tempo-${i}`,
+      obter: () => musica.audio,
+      definir: (b) => {
+        definirAudio(musica, b);
+        titulo.value = musica.titulo;
+      },
+      extra: titulo,
+    });
+
+    const setas = document.createElement('div');
+    setas.className = 'setas';
+    [['↑', 'Subir', i - 1], ['↓', 'Descer', i + 1]].forEach(([texto, dica, destino]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn secundario pequeno';
+      btn.textContent = texto;
+      btn.title = dica;
+      btn.setAttribute('aria-label', `${dica} música ${i + 1}`);
+      btn.disabled = destino < 0 || destino >= rascunho.length;
+      btn.addEventListener('click', () => mover(i, destino));
+      setas.appendChild(btn);
+    });
+
+    linha.append(alca, slot, setas);
+    return linha;
+  }
+
   function renderSlots() {
     const lista = el('slots-tempo');
     lista.innerHTML = '';
-    rascunho.forEach((musica, i) => {
-      const titulo = document.createElement('input');
-      titulo.type = 'text';
-      titulo.className = 'slot-titulo';
-      titulo.placeholder = 'Título da música';
-      titulo.value = musica.titulo;
-      titulo.addEventListener('input', () => { musica.titulo = titulo.value; });
+    rascunho.forEach((musica, i) => lista.appendChild(criarLinha(musica, i)));
+  }
 
-      lista.appendChild(Slot.criar({
-        rotulo: `${i + 1}`,
-        chave: `tempo-${i}`,
-        obter: () => musica.audio,
-        definir: (b) => { musica.audio = b; },
-        extra: titulo,
-      }));
+  function ligarAreaArquivos() {
+    const area = el('area-arquivos');
+    const entrada = el('entrada-arquivos');
+    const temArquivos = (e) => [...e.dataTransfer.types].includes('Files');
+
+    area.addEventListener('click', () => entrada.click());
+    area.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        entrada.click();
+      }
     });
+    entrada.addEventListener('change', () => {
+      distribuir(entrada.files);
+      entrada.value = '';
+    });
+    area.addEventListener('dragover', (e) => {
+      if (!temArquivos(e)) return;
+      e.preventDefault();
+      area.classList.add('ativa');
+    });
+    area.addEventListener('dragleave', () => area.classList.remove('ativa'));
+    area.addEventListener('drop', (e) => {
+      if (!temArquivos(e)) return;
+      e.preventDefault();
+      area.classList.remove('ativa');
+      distribuir(e.dataTransfer.files);
+    });
+    // Evita que soltar um arquivo fora da área abra o áudio no lugar do painel.
+    ['dragover', 'drop'].forEach((tipo) => {
+      window.addEventListener(tipo, (e) => {
+        if (temArquivos(e) && !area.contains(e.target)) e.preventDefault();
+      });
+    });
+    el('btn-limpar-musicas').addEventListener('click', limparTodas);
   }
 
   function limparFormulario() {
@@ -37,6 +185,7 @@ const AdminTempo = (() => {
     el('form-rodada').reset();
     el('titulo-form-rodada').textContent = 'Cadastrar rodada';
     el('btn-cancelar-rodada').hidden = true;
+    el('aviso-arquivos').textContent = '';
     renderSlots();
   }
 
@@ -111,6 +260,7 @@ const AdminTempo = (() => {
     aoAlterar = callbackAlteracao || aoAlterar;
     el('form-rodada').addEventListener('submit', salvar);
     el('btn-cancelar-rodada').addEventListener('click', limparFormulario);
+    ligarAreaArquivos();
     renderSlots();
     return renderTabela();
   }

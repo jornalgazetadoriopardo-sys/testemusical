@@ -29,7 +29,10 @@ const Player = (() => {
     urlAtual = URL.createObjectURL(blob);
     chaveAtual = chave;
     audio.src = urlAtual;
+    const url = urlAtual;
     audio.play().catch((erro) => {
+      // Interrompido por outro áudio: a falha chega depois e não deve parar o novo.
+      if (erro.name === 'AbortError' || url !== urlAtual) return;
       console.error('Falha ao tocar áudio', erro);
       parar();
     });
