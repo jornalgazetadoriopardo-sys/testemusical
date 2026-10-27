@@ -101,7 +101,7 @@ const JogoTempo = (() => {
   }
 
   function registrar() {
-    Historico.adicionar({
+    Historico.tempo.adicionar({
       data: new Date().toISOString(),
       rodada: rodada.nome,
       ouvinte: el('campo-ouvinte').value.trim(),
@@ -154,7 +154,7 @@ const JogoTempo = (() => {
   }
 
   function renderHistorico() {
-    const registros = Historico.listar();
+    const registros = Historico.tempo.listar();
     const lista = el('lista-historico');
     lista.innerHTML = '';
     el('historico-vazio').hidden = registros.length > 0;
@@ -197,7 +197,7 @@ const JogoTempo = (() => {
 
       item.querySelector('button').addEventListener('click', async () => {
         if (!await Confirmar.perguntar('Excluir este registro do histórico?', 'Excluir')) return;
-        Historico.excluir(r.id);
+        Historico.tempo.excluir(r.id);
         renderHistorico();
       });
       lista.appendChild(item);
@@ -206,7 +206,7 @@ const JogoTempo = (() => {
 
   async function limparHistorico() {
     if (!await Confirmar.perguntar('Apagar todo o histórico de participações?', 'Apagar tudo')) return;
-    Historico.limpar();
+    Historico.tempo.limpar();
     renderHistorico();
   }
 

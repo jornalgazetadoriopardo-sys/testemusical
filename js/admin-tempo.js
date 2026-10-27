@@ -5,32 +5,15 @@ const AdminTempo = (() => {
   let editandoId = null;
   let rascunho = novoRascunho();
   let aoAlterar = () => {};
+  let arrastando = null;
 
   function novoRascunho() {
     return Array.from({ length: JogoTempo.TOTAL_MUSICAS }, () => ({ titulo: '', audio: null }));
   }
 
-  const EXTENSOES_AUDIO = /\.(mp3|wav|ogg|oga|m4a|aac|flac|wma|opus|webm)$/i;
-  let arrastando = null;
-
-  function ehAudio(arquivo) {
-    return arquivo.type.startsWith('audio/') || EXTENSOES_AUDIO.test(arquivo.name);
-  }
-
-  // "03 - Asa_Branca.mp3" -> "Asa Branca"
-  function tituloDoArquivo(nome) {
-    const semExtensao = nome.replace(/\.[^.]+$/, '');
-    const limpo = semExtensao
-      .replace(/[_]+/g, ' ')
-      .replace(/^\s*\d{1,3}\s*[-–.)_]?\s+/, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-    return limpo || semExtensao;
-  }
-
   function definirAudio(musica, arquivo) {
     musica.audio = arquivo;
-    if (arquivo && !musica.titulo.trim()) musica.titulo = tituloDoArquivo(arquivo.name);
+    if (arquivo && !musica.titulo.trim()) musica.titulo = Arquivos.tituloDoArquivo(arquivo.name);
   }
 
   function mover(de, para) {
@@ -43,17 +26,14 @@ const AdminTempo = (() => {
 
   // Distribui os arquivos, em ordem de nome, nas posições vazias.
   function distribuir(lista) {
-    const ordenados = [...lista]
-      .filter(ehAudio)
-      .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { numeric: true }));
-    const ignorados = lista.length - ordenados.length;
+    const { audios, ignorados } = Arquivos.separar(lista);
     const vazias = rascunho.filter((m) => !m.audio);
-    ordenados.slice(0, vazias.length).forEach((arquivo, i) => definirAudio(vazias[i], arquivo));
+    audios.slice(0, vazias.length).forEach((arquivo, i) => definirAudio(vazias[i], arquivo));
     renderSlots();
 
     const avisos = [];
-    if (ordenados.length > vazias.length) {
-      avisos.push(`${ordenados.length - vazias.length} arquivo(s) ficaram de fora: não há posições vazias suficientes.`);
+    if (audios.length > vazias.length) {
+      avisos.push(`${audios.length - vazias.length} arquivo(s) ficaram de fora: não há posições vazias suficientes.`);
     }
     if (ignorados) avisos.push(`${ignorados} arquivo(s) ignorados por não serem áudio.`);
     el('aviso-arquivos').textContent = avisos.join(' ');
@@ -143,39 +123,7 @@ const AdminTempo = (() => {
   }
 
   function ligarAreaArquivos() {
-    const area = el('area-arquivos');
-    const entrada = el('entrada-arquivos');
-    const temArquivos = (e) => [...e.dataTransfer.types].includes('Files');
-
-    area.addEventListener('click', () => entrada.click());
-    area.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        entrada.click();
-      }
-    });
-    entrada.addEventListener('change', () => {
-      distribuir(entrada.files);
-      entrada.value = '';
-    });
-    area.addEventListener('dragover', (e) => {
-      if (!temArquivos(e)) return;
-      e.preventDefault();
-      area.classList.add('ativa');
-    });
-    area.addEventListener('dragleave', () => area.classList.remove('ativa'));
-    area.addEventListener('drop', (e) => {
-      if (!temArquivos(e)) return;
-      e.preventDefault();
-      area.classList.remove('ativa');
-      distribuir(e.dataTransfer.files);
-    });
-    // Evita que soltar um arquivo fora da área abra o áudio no lugar do painel.
-    ['dragover', 'drop'].forEach((tipo) => {
-      window.addEventListener(tipo, (e) => {
-        if (temArquivos(e) && !area.contains(e.target)) e.preventDefault();
-      });
-    });
+    Arquivos.ligarArea(el('area-arquivos'), el('entrada-arquivos'), distribuir);
     el('btn-limpar-musicas').addEventListener('click', limparTodas);
   }
 

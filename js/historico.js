@@ -1,37 +1,44 @@
-// Histórico das participações do Jogo do Tempo, salvo no navegador (localStorage).
-// Registro: { id, data, rodada, ouvinte, itens: [{ titulo, tempo, status }], total, respondidas }
+// Históricos salvos no navegador (localStorage), um por jogo.
+// Jogo do Tempo: { id, data, rodada, ouvinte, itens: [{ titulo, tempo, status }], total, respondidas }
+// Jogo das Notas: { id, data, ouvinte, musica, notas, acertou, pontos }
 const Historico = (() => {
-  const CHAVE = 'painel-participacao:historico-tempo';
-  let memoria = [];
+  function criar(chave) {
+    let memoria = [];
 
-  function ler() {
-    try {
-      const salvo = JSON.parse(localStorage.getItem(CHAVE));
-      return Array.isArray(salvo) ? salvo : memoria;
-    } catch {
-      return memoria;
+    function ler() {
+      try {
+        const salvo = JSON.parse(localStorage.getItem(chave));
+        return Array.isArray(salvo) ? salvo : memoria;
+      } catch {
+        return memoria;
+      }
     }
-  }
 
-  function gravar(lista) {
-    memoria = lista;
-    try {
-      localStorage.setItem(CHAVE, JSON.stringify(lista));
-    } catch {
-      // Sem armazenamento disponível: o histórico vale só enquanto a página estiver aberta.
+    function gravar(lista) {
+      memoria = lista;
+      try {
+        localStorage.setItem(chave, JSON.stringify(lista));
+      } catch {
+        // Sem armazenamento disponível: o histórico vale só enquanto a página estiver aberta.
+      }
     }
+
+    return {
+      listar: ler,
+      adicionar(registro) {
+        gravar([{ id: Date.now(), ...registro }, ...ler()]);
+      },
+      excluir(id) {
+        gravar(ler().filter((r) => r.id !== id));
+      },
+      limpar() {
+        gravar([]);
+      },
+    };
   }
 
   return {
-    listar: ler,
-    adicionar(registro) {
-      gravar([{ id: Date.now(), ...registro }, ...ler()]);
-    },
-    excluir(id) {
-      gravar(ler().filter((r) => r.id !== id));
-    },
-    limpar() {
-      gravar([]);
-    },
+    tempo: criar('painel-participacao:historico-tempo'),
+    notas: criar('painel-participacao:historico-notas'),
   };
 })();

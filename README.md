@@ -10,11 +10,12 @@ Abra pelo link https://claude.ai/artifact/1z1xFtKeVj4qxXGvqhceXr ou abra o arqui
 
 A aba **Administração** tem uma sub-aba para cada jogo.
 
-Em **Jogo das Notas**, cadastre cada música:
+Em **Jogo das Notas**:
 
-- **Título** e **artista**
-- **Música inteira**: o arquivo completo
-- **Áudios das notas (1 a 7)**: um arquivo para cada botão. O botão 3, por exemplo, toca o áudio com as 3 primeiras notas.
+- **Pontuação**: os pontos de quem acerta ouvindo 1, 2, … 7 notas (padrão 70, 60, 50, 40, 30, 20, 10). Quem erra fica com 0. Salva automaticamente e vale para todas as músicas.
+- Cadastre cada música com **título**, **artista**, **música inteira** e **áudios das notas (1 a 7)**. O botão 3, por exemplo, toca o áudio com as 3 primeiras notas.
+- Arraste o arquivo da música inteira para a primeira área tracejada (se o título estiver vazio, ele vem do nome do arquivo).
+- Arraste os 7 áudios das notas de uma vez para a segunda área: entram nas posições vazias em ordem de nome. Corrija a ordem com as setas ↑ ↓.
 
 Os slots podem ficar vazios; o botão correspondente aparece desabilitado no jogo.
 Músicas cadastradas podem ser editadas ou excluídas na tabela.
@@ -27,13 +28,17 @@ Em **Jogo do Tempo**, cadastre rodadas: um nome (ex.: "Programa de segunda") e a
 
 ### Jogo das Notas
 
-1. Clique na música em jogo.
-2. Clique nos botões de **1 a 7** para tocar a quantidade de notas que será mostrada ao participante.
-3. **▶ Música inteira** toca a faixa completa; **■ Parar** interrompe o áudio.
+1. Clique na música em jogo e digite o **nome do ouvinte**.
+2. Clique nos botões de **1 a 7** para tocar a quantidade de notas que o ouvinte escolher. Cada botão mostra quantos pontos vale.
+3. O quadro **Valendo** mostra os pontos da maior quantidade de notas já tocada.
+4. Marque **✔ Acertou** (ganha os pontos) ou **✘ Errou** (0 pontos). A jogada é registrada e o resultado aparece na tela.
 
-Os botões de notas já tocados ficam marcados em laranja. As músicas já usadas aparecem com borda tracejada. **Zerar rodada** limpa as marcações.
+**▶ Música inteira** toca a faixa completa; **■ Parar** interrompe o áudio. **Zerar notas** limpa as notas tocadas sem registrar nada.
+As músicas já usadas aparecem com borda tracejada.
 
-Atalhos de teclado: `1`–`7` tocam as notas, `M` toca a música inteira, `Esc` ou `Espaço` param o áudio.
+Abaixo do jogo ficam o **Ranking** (soma dos pontos por ouvinte, pelo nome) e o **Histórico** de todas as respostas, salvos no navegador. Dá para excluir uma resposta ou apagar tudo.
+
+Atalhos de teclado: `1`–`7` tocam as notas, `M` toca a música inteira, `Esc` ou `Espaço` param o áudio, `A` acertou, `E` errou.
 
 ### Jogo do Tempo
 

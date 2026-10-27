@@ -410,3 +410,64 @@ fieldset .dica { margin-top: 0; }
   .registro summary { grid-template-columns: 1fr auto; }
   .r-rodada, .r-respondidas { display: none; }
 }
+
+/* ---------- Pontuação e resposta (Jogo das Notas) ---------- */
+.campos-pontuacao {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+.campo-ponto { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--texto-suave); }
+.campo-ponto input,
+.campo-ouvinte input {
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  color: var(--texto);
+  padding: 10px 12px;
+  font-size: 1rem;
+  width: 100%;
+}
+.campo-ponto input { font-variant-numeric: tabular-nums; font-weight: 700; text-align: center; }
+.campo-ponto input:focus { outline: 2px solid var(--primaria); border-color: transparent; }
+
+.btn.nota .pts { font-size: 0.75rem; color: var(--destaque); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.btn.nota.tocando .pts { color: #fff; }
+
+.resposta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--fundo);
+}
+.resposta .controles { margin-top: 0; }
+.valendo { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.valendo .rotulo-total { color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.8rem; }
+.valendo strong { font-size: 2rem; font-variant-numeric: tabular-nums; color: var(--destaque); }
+.btn.acertou { font-size: 1.1rem; padding: 14px 28px; background: var(--sucesso); border-color: var(--sucesso); color: #fff; }
+.btn.errou { font-size: 1.1rem; padding: 14px 28px; background: transparent; color: var(--perigo); border-color: #5a2a2a; }
+.resultado.errou { border-color: var(--perigo); }
+.resultado.errou .total { color: var(--perigo); }
+.resultado:not(.errou) .total { color: var(--sucesso); }
+
+/* ---------- Ranking e histórico (Jogo das Notas) ---------- */
+.abas-placar { flex-wrap: wrap; }
+.tabela-wrap { overflow-x: auto; }
+.tabela .num-col { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tabela .pontos { font-weight: 700; }
+.tabela .posicao { font-weight: 700; color: var(--texto-suave); }
+.tabela tr.podio-1 .posicao { color: #f5c542; }
+.tabela tr.podio-2 .posicao { color: #c9d1dc; }
+.tabela tr.podio-3 .posicao { color: #d08a4f; }
+.res-acertou { color: var(--sucesso); font-weight: 600; }
+.res-errou { color: var(--perigo); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .campos-pontuacao { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.linha-rodada .slot-nota .slot-rotulo { width: 70px; }

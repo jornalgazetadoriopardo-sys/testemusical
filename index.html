@@ -33,8 +33,12 @@
             <h2 id="titulo-em-jogo"></h2>
             <p id="artista-em-jogo" class="artista"></p>
           </div>
-          <button id="btn-zerar" class="btn secundario" title="Limpa as marcações de notas já tocadas">Zerar rodada</button>
+          <button id="btn-zerar" class="btn secundario" title="Limpa as notas já tocadas sem registrar a jogada">Zerar notas</button>
         </div>
+
+        <label class="campo-ouvinte">Nome do ouvinte *
+          <input type="text" id="campo-ouvinte-notas" placeholder="Quem está participando" autocomplete="off">
+        </label>
 
         <h3>2. Quantas notas tocar</h3>
         <div id="botoes-notas" class="grade-notas"></div>
@@ -44,7 +48,58 @@
           <button id="btn-parar" class="btn parar">■ Parar</button>
         </div>
 
-        <p class="dica">Atalhos: teclas <kbd>1</kbd>–<kbd>7</kbd> tocam as notas, <kbd>M</kbd> toca a música inteira, <kbd>Esc</kbd> ou <kbd>Espaço</kbd> param o áudio.</p>
+        <h3>3. Resposta do ouvinte</h3>
+        <div class="resposta">
+          <div class="valendo">
+            <span class="rotulo-total">Valendo</span>
+            <strong id="valendo-pontos">—</strong>
+            <span id="valendo-detalhe" class="aviso"></span>
+          </div>
+          <div class="controles">
+            <button id="btn-acertou" class="btn acertou">✔ Acertou</button>
+            <button id="btn-errou" class="btn errou">✘ Errou</button>
+          </div>
+        </div>
+        <p id="aviso-ouvinte-notas" class="aviso-arquivos" role="status"></p>
+
+        <div id="resultado-notas" class="resultado" hidden>
+          <p id="resultado-notas-titulo" class="rotulo-total"></p>
+          <p id="resultado-notas-pontos" class="total"></p>
+          <p id="resultado-notas-detalhe" class="aviso"></p>
+        </div>
+
+        <p class="dica">Atalhos: <kbd>1</kbd>–<kbd>7</kbd> tocam as notas, <kbd>M</kbd> toca a música inteira, <kbd>Esc</kbd> ou <kbd>Espaço</kbd> param o áudio, <kbd>A</kbd> acertou, <kbd>E</kbd> errou.</p>
+      </div>
+
+      <div class="bloco">
+        <div class="cabecalho-musica">
+          <nav class="abas abas-placar" role="tablist">
+            <button class="aba ativa" role="tab" aria-selected="true" data-painel="painel-ranking">Ranking</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="painel-historico-notas">Histórico</button>
+          </nav>
+          <button id="btn-limpar-historico-notas" class="btn perigo pequeno">Apagar histórico e ranking</button>
+        </div>
+        <p class="dica">Cada resposta fica registrada neste navegador. O ranking soma os pontos de cada ouvinte pelo nome.</p>
+
+        <div id="painel-ranking">
+          <div id="tabela-ranking-wrap" class="tabela-wrap">
+            <table class="tabela">
+              <thead><tr><th class="num-col">Posição</th><th>Ouvinte</th><th class="num-col">Acertos</th><th class="num-col">Pontos</th></tr></thead>
+              <tbody id="tabela-ranking"></tbody>
+            </table>
+          </div>
+          <p id="ranking-vazio" class="aviso" hidden>Ninguém pontuou ainda.</p>
+        </div>
+
+        <div id="painel-historico-notas" hidden>
+          <div id="tabela-historico-notas-wrap" class="tabela-wrap">
+            <table class="tabela">
+              <thead><tr><th class="num-col">Data</th><th>Ouvinte</th><th>Música</th><th class="num-col">Notas</th><th>Resultado</th><th class="num-col">Pontos</th><th></th></tr></thead>
+              <tbody id="tabela-historico-notas"></tbody>
+            </table>
+          </div>
+          <p id="historico-notas-vazio" class="aviso" hidden>Nenhuma resposta registrada ainda.</p>
+        </div>
       </div>
     </section>
 
@@ -111,6 +166,16 @@
 
       <div id="admin-notas" class="subview ativa">
         <div class="bloco">
+          <div class="cabecalho-musica">
+            <h2>Pontuação</h2>
+            <button type="button" id="btn-pontuacao-padrao" class="btn secundario pequeno">Restaurar padrão</button>
+          </div>
+          <p class="dica">Pontos de quem acerta a música ouvindo cada quantidade de notas. Quem erra fica com 0. Vale para todas as músicas e é salvo automaticamente.</p>
+          <div id="campos-pontuacao" class="campos-pontuacao"></div>
+          <p id="status-pontuacao" class="dica" role="status"></p>
+        </div>
+
+        <div class="bloco">
           <h2 id="titulo-form">Cadastrar música</h2>
           <form id="form-musica" autocomplete="off">
             <div class="linha">
@@ -124,12 +189,27 @@
 
             <fieldset>
               <legend>Música inteira</legend>
+              <div id="area-completa" class="area-arquivos" role="button" tabindex="0">
+                <strong>Arraste o arquivo da música inteira para cá</strong>
+                <span>ou clique para escolher. Se o título estiver vazio, ele vem do nome do arquivo.</span>
+                <input type="file" id="entrada-completa" accept="audio/*" hidden>
+              </div>
+              <p id="aviso-completa" class="aviso-arquivos" role="status"></p>
               <div id="slot-completa" class="slot"></div>
             </fieldset>
 
             <fieldset>
               <legend>Áudios das notas (1 a 7)</legend>
-              <p class="dica">Cada botão do jogo toca o arquivo enviado aqui. Ex.: o botão 3 toca o áudio com as 3 primeiras notas.</p>
+              <div id="area-notas-arquivos" class="area-arquivos" role="button" tabindex="0">
+                <strong>Arraste os áudios das notas para cá</strong>
+                <span>ou clique para escolher vários de uma vez. Eles entram nas posições vazias, em ordem de nome: o primeiro vira "1 nota", o segundo "2 notas" e assim por diante.</span>
+                <input type="file" id="entrada-notas" accept="audio/*" multiple hidden>
+              </div>
+              <div class="barra-arquivos">
+                <p id="aviso-notas" class="aviso-arquivos" role="status"></p>
+                <button type="button" id="btn-limpar-notas" class="btn secundario pequeno">Limpar as 7 notas</button>
+              </div>
+              <p class="dica">Cada botão do jogo toca o arquivo da sua linha. Para corrigir a ordem, use as setas.</p>
               <div id="slots-notas" class="slots-notas"></div>
             </fieldset>
 
@@ -211,6 +291,8 @@
   <script src="js/confirmar.js"></script>
   <script src="js/db.js"></script>
   <script src="js/historico.js"></script>
+  <script src="js/pontuacao.js"></script>
+  <script src="js/arquivos.js"></script>
   <script src="js/player.js"></script>
   <script src="js/slot.js"></script>
   <script src="js/jogo-notas.js"></script>
