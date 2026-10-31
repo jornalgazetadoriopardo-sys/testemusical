@@ -54,5 +54,7 @@ const Player = (() => {
     },
     aoMudar: (fn) => ouvintes.push(fn),
     atual: () => chaveAtual,
+    // Segundos tocados e duração do áudio atual (duração NaN enquanto carrega).
+    progresso: () => ({ atual: audio.currentTime, duracao: audio.duration }),
   };
 })();

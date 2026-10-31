@@ -9,16 +9,34 @@
 <body>
   <header class="topo">
     <h1>Painel de Participação dos Ouvintes</h1>
+    <div id="tocando-agora" class="tocando-agora" role="status" hidden>
+      <span class="pulso" aria-hidden="true"></span>
+      <span>Tocando: <strong id="tocando-agora-nome"></strong></span>
+      <button type="button" id="btn-parar-tocando-agora" class="btn parar pequeno">■ Parar</button>
+    </div>
     <nav class="abas">
-      <button class="aba ativa" data-view="jogo-notas">Jogo das Notas</button>
+      <button class="aba ativa" data-view="inicio">Início</button>
+      <button class="aba" data-view="jogo-notas">Jogo das Notas</button>
       <button class="aba" data-view="jogo-tempo">Jogo do Tempo</button>
       <button class="aba" data-view="admin">Administração</button>
     </nav>
   </header>
 
   <main>
+    <!-- ===================== INÍCIO ===================== -->
+    <section id="inicio" class="view ativa">
+      <div class="bloco">
+        <div class="cabecalho-musica">
+          <h2>Vinhetas</h2>
+          <button id="btn-parar-vinheta" class="btn parar">■ Parar</button>
+        </div>
+        <div id="botoes-vinhetas" class="grade-vinhetas"></div>
+        <p class="dica">Clique para tocar e clique de novo para parar. A vinheta continua tocando se você trocar de aba. Atalhos: <kbd>1</kbd>–<kbd>5</kbd> tocam as vinhetas, <kbd>Esc</kbd> ou <kbd>Espaço</kbd> param. Os áudios são cadastrados em <strong>Administração → Vinhetas</strong>.</p>
+      </div>
+    </section>
+
     <!-- ===================== JOGO DAS NOTAS ===================== -->
-    <section id="jogo-notas" class="view ativa">
+    <section id="jogo-notas" class="view">
       <div class="bloco">
         <h2>1. Escolha a música em jogo</h2>
         <div id="lista-musicas-jogo" class="grade-musicas"></div>
@@ -160,11 +178,20 @@
     <!-- ===================== ADMINISTRAÇÃO ===================== -->
     <section id="admin" class="view">
       <nav class="abas subabas">
-        <button class="aba ativa" data-subview="admin-notas">Jogo das Notas</button>
+        <button class="aba ativa" data-subview="admin-vinhetas">Vinhetas</button>
+        <button class="aba" data-subview="admin-notas">Jogo das Notas</button>
         <button class="aba" data-subview="admin-tempo">Jogo do Tempo</button>
       </nav>
 
-      <div id="admin-notas" class="subview ativa">
+      <div id="admin-vinhetas" class="subview ativa">
+        <div class="bloco">
+          <h2>Vinhetas do Início</h2>
+          <p class="dica">Um áudio para cada botão da página inicial. Escolha o arquivo ou arraste-o sobre a linha. É salvo na hora.</p>
+          <div id="slots-vinhetas" class="slots-notas"></div>
+        </div>
+      </div>
+
+      <div id="admin-notas" class="subview">
         <div class="bloco">
           <div class="cabecalho-musica">
             <h2>Pontuação</h2>
@@ -295,8 +322,10 @@
   <script src="js/arquivos.js"></script>
   <script src="js/player.js"></script>
   <script src="js/slot.js"></script>
+  <script src="js/vinhetas.js"></script>
   <script src="js/jogo-notas.js"></script>
   <script src="js/jogo-tempo.js"></script>
+  <script src="js/admin-vinhetas.js"></script>
   <script src="js/admin-notas.js"></script>
   <script src="js/admin-tempo.js"></script>
   <script src="js/app.js"></script>

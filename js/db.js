@@ -1,10 +1,11 @@
 // Armazenamento local (IndexedDB) dos cadastros e seus áudios.
 // musicas (Jogo das Notas): { id, titulo, artista, completa: Blob|null, notas: [Blob|null x7], criadoEm }
 // rodadas (Jogo do Tempo): { id, nome, musicas: [{ titulo, audio: Blob|null } x10], criadoEm }
+// vinhetas (Início): { id: 'abertura' | 'volta-intervalo' | ..., audio: Blob }
 const DB = (() => {
   const NOME = 'painel-participacao';
-  const VERSAO = 2;
-  const STORES = ['musicas', 'rodadas'];
+  const VERSAO = 3;
+  const STORES = ['musicas', 'rodadas', 'vinhetas'];
   let conexao = null;
 
   function abrir() {
@@ -49,5 +50,6 @@ const DB = (() => {
   return {
     musicas: colecao('musicas'),
     rodadas: colecao('rodadas'),
+    vinhetas: colecao('vinhetas'),
   };
 })();

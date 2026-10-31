@@ -39,7 +39,7 @@ h3 { font-size: 1rem; color: var(--texto-suave); margin-top: 20px; }
 }
 .topo h1 { margin: 0; }
 
-.abas { display: flex; gap: 8px; }
+.abas { display: flex; flex-wrap: wrap; gap: 8px; }
 .aba {
   background: transparent;
   color: var(--texto-suave);
@@ -471,3 +471,53 @@ fieldset .dica { margin-top: 0; }
   .campos-pontuacao { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .linha-rodada .slot-nota .slot-rotulo { width: 70px; }
+
+/* ---------- Início: vinhetas ---------- */
+.grade-vinhetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+.btn.vinheta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 150px;
+  padding: 18px 18px 22px;
+  text-align: left;
+  overflow: hidden;
+}
+.btn.vinheta .tecla {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  border: 1px solid var(--borda);
+  border-radius: 4px;
+  padding: 0 6px;
+}
+.btn.vinheta .nome { font-size: 1.35rem; font-weight: 800; line-height: 1.15; text-wrap: balance; margin-top: auto; }
+.btn.vinheta .estado { font-size: 0.85rem; color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+.btn.vinheta .barra { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: transparent; }
+.btn.vinheta .preenchido { display: block; height: 100%; width: 0; background: #fff; opacity: 0.85; }
+.btn.vinheta.tocando .tecla,
+.btn.vinheta.tocando .estado { color: #fff; border-color: rgba(255, 255, 255, 0.6); }
+.btn.vinheta.tocando .barra { background: rgba(0, 0, 0, 0.2); }
+
+.tocando-agora {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px 4px 12px;
+  border: 1px solid var(--sucesso);
+  border-radius: var(--raio);
+  font-size: 0.9rem;
+}
+.tocando-agora .btn { padding: 4px 10px; font-size: 0.85rem; }
+.pulso { width: 10px; height: 10px; border-radius: 50%; background: var(--sucesso); animation: pulso 1.2s ease-in-out infinite; }
+@keyframes pulso { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) { .pulso { animation: none; } }
+
+.linha-vinheta .slot-rotulo { width: 150px; }
+.linha-vinheta { border-style: dashed; }
+.linha-vinheta:not(.alvo) { border-color: transparent; }

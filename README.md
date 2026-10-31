@@ -6,9 +6,18 @@ Painel para o operador conduzir os jogos com ouvintes durante o programa de rád
 
 Abra pelo link https://claude.ai/artifact/1z1xFtKeVj4qxXGvqhceXr ou abra o arquivo `index.html` no navegador (Chrome, Edge ou Firefox). Não precisa instalar nada.
 
+### Início
+
+A página inicial tem os botões das vinhetas: **Abertura**, **Volta do intervalo**, **Jogo das notas**, **Vitrola musical** e **Encerramento**.
+Clique para tocar e de novo para parar. O botão mostra o tempo tocado, o que falta e uma barra de progresso.
+A vinheta continua tocando se você trocar de aba; enquanto toca, aparece um aviso no topo com o botão **■ Parar**.
+Atalhos de teclado: `1`–`5` tocam as vinhetas, `Esc` ou `Espaço` param.
+
 ### Administração
 
-A aba **Administração** tem uma sub-aba para cada jogo.
+A aba **Administração** tem uma sub-aba para as vinhetas e uma para cada jogo.
+
+Em **Vinhetas**, escolha (ou arraste sobre a linha) o áudio de cada botão do Início. É salvo na hora.
 
 Em **Jogo das Notas**:
 
