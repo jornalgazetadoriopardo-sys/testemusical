@@ -207,7 +207,7 @@ fieldset .dica { margin-top: 0; }
 .tabela .acoes { text-align: right; white-space: nowrap; }
 .tabela .acoes .btn + .btn { margin-left: 6px; }
 
-/* ---------- Jogo do Tempo ---------- */
+/* ---------- Vitrola Musical ---------- */
 .btn.rodada.selecionada { background: var(--primaria); border-color: var(--primaria); color: #fff; }
 
 .cronometro {
@@ -309,7 +309,7 @@ fieldset .dica { margin-top: 0; }
 .confirmacao-caixa p { margin: 0; font-size: 1.05rem; }
 .confirmacao-caixa .controles { justify-content: flex-end; }
 
-/* ---------- Arquivos em lote e ordem (Jogo do Tempo) ---------- */
+/* ---------- Arquivos em lote e ordem (Vitrola Musical) ---------- */
 .area-arquivos {
   display: flex;
   flex-direction: column;
@@ -348,7 +348,7 @@ fieldset .dica { margin-top: 0; }
 .alca:active { cursor: grabbing; }
 .setas { display: flex; gap: 4px; }
 
-/* ---------- Ouvinte e histórico (Jogo do Tempo) ---------- */
+/* ---------- Ouvinte e histórico (Vitrola Musical) ---------- */
 .campo-ouvinte {
   display: flex;
   flex-direction: column;

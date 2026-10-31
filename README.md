@@ -8,7 +8,7 @@ Abra pelo link https://claude.ai/artifact/1z1xFtKeVj4qxXGvqhceXr ou abra o arqui
 
 ### Início
 
-A página inicial tem os botões das vinhetas: **Abertura**, **Volta do intervalo**, **Jogo das notas**, **Vitrola musical** e **Encerramento**.
+A página inicial tem os botões das vinhetas: **Abertura**, **Volta do intervalo**, **Jogo das notas**, **Vitrola Musical** e **Encerramento**.
 Clique para tocar e de novo para parar. O botão mostra o tempo tocado, o que falta e uma barra de progresso.
 A vinheta continua tocando se você trocar de aba; enquanto toca, aparece um aviso no topo com o botão **■ Parar**.
 Atalhos de teclado: `1`–`5` tocam as vinhetas, `Esc` ou `Espaço` param.
@@ -29,7 +29,7 @@ Em **Jogo das Notas**:
 Os slots podem ficar vazios; o botão correspondente aparece desabilitado no jogo.
 Músicas cadastradas podem ser editadas ou excluídas na tabela.
 
-Em **Jogo do Tempo**, cadastre rodadas: um nome (ex.: "Programa de segunda") e as 10 músicas na ordem em que serão tocadas, cada uma com título e áudio.
+Em **Vitrola Musical**, cadastre rodadas: um nome (ex.: "Programa de segunda") e as 10 músicas na ordem em que serão tocadas, cada uma com título e áudio.
 
 - Arraste vários arquivos de áudio de uma vez para a área tracejada (ou clique nela para escolher). Eles entram nas posições vazias, em ordem de nome.
 - O título é preenchido pelo nome do arquivo, sem a extensão e sem o número da faixa (`03 - Asa_Branca.mp3` vira `Asa Branca`). Dá para editar.
@@ -49,7 +49,7 @@ Abaixo do jogo ficam o **Ranking** (soma dos pontos por ouvinte, pelo nome) e o 
 
 Atalhos de teclado: `1`–`7` tocam as notas, `M` toca a música inteira, `Esc` ou `Espaço` param o áudio, `A` acertou, `E` errou.
 
-### Jogo do Tempo
+### Vitrola Musical
 
 1. Escolha a rodada.
 2. Clique no botão **1**: a primeira música começa a tocar e o cronômetro dispara.

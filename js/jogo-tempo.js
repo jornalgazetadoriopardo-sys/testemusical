@@ -1,4 +1,4 @@
-// Jogo do Tempo: 10 músicas em sequência. "Próxima" registra o tempo de resposta
+// Vitrola Musical: 10 músicas em sequência. "Próxima" registra o tempo de resposta
 // e já toca a seguinte; "Pular" registra "pulou". Depois da última, volta às puladas.
 const JogoTempo = (() => {
   const TOTAL_MUSICAS = 10;

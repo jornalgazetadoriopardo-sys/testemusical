@@ -1,5 +1,5 @@
 // Históricos salvos no navegador (localStorage), um por jogo.
-// Jogo do Tempo: { id, data, rodada, ouvinte, itens: [{ titulo, tempo, status }], total, respondidas }
+// Vitrola Musical: { id, data, rodada, ouvinte, itens: [{ titulo, tempo, status }], total, respondidas }
 // Jogo das Notas: { id, data, ouvinte, musica, notas, acertou, pontos }
 const Historico = (() => {
   function criar(chave) {

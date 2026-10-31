@@ -4,7 +4,7 @@ const Vinhetas = (() => {
     { id: 'abertura', nome: 'Abertura' },
     { id: 'volta-intervalo', nome: 'Volta do intervalo' },
     { id: 'jogo-notas', nome: 'Jogo das notas' },
-    { id: 'vitrola-musical', nome: 'Vitrola musical' },
+    { id: 'vitrola-musical', nome: 'Vitrola Musical' },
     { id: 'encerramento', nome: 'Encerramento' },
   ];
   const el = (id) => document.getElementById(id);

@@ -1,6 +1,6 @@
 // Armazenamento local (IndexedDB) dos cadastros e seus áudios.
 // musicas (Jogo das Notas): { id, titulo, artista, completa: Blob|null, notas: [Blob|null x7], criadoEm }
-// rodadas (Jogo do Tempo): { id, nome, musicas: [{ titulo, audio: Blob|null } x10], criadoEm }
+// rodadas (Vitrola Musical): { id, nome, musicas: [{ titulo, audio: Blob|null } x10], criadoEm }
 // vinhetas (Início): { id: 'abertura' | 'volta-intervalo' | ..., audio: Blob }
 const DB = (() => {
   const NOME = 'painel-participacao';

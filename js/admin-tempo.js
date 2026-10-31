@@ -1,4 +1,4 @@
-// Administração do Jogo do Tempo: cadastro, edição e exclusão das rodadas de 10 músicas.
+// Administração do Vitrola Musical: cadastro, edição e exclusão das rodadas de 10 músicas.
 const AdminTempo = (() => {
   const el = (id) => document.getElementById(id);
 
